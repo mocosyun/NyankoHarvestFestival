@@ -36,9 +36,9 @@ var game = cc.Layer.extend({
     //ショッピングカートを操作するレイヤー
     topLayer = cc.Layer.create();
     this.addChild(topLayer);
-    cart = cc.Sprite.create(res.cart_png);
+    cart = cc.Sprite.create(res.cat0_png);
     topLayer.addChild(cart, 0);
-    cart.setPosition(240, 24);
+    cart.setPosition(240, 60);
     this.schedule(this.addItem, 1);
     //タッチイベントのリスナー追加
     cc.eventManager.addListener(touchListener, this);
