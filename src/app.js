@@ -6,12 +6,18 @@ var detectedX;　 //現在タッチしているX座標
 var savedX;　 //前回タッチしていたX座標
 var touching = false;　 //タッチ状況管理用flag
 
+var audioEngine;
 var gameScene = cc.Scene.extend({
   onEnter: function() {
     this._super();
     gameLayer = new game();
     gameLayer.init();
     this.addChild(gameLayer);
+
+    //音楽再生エンジン
+    audioEngine = cc.audioEngine;
+    //bgm再生
+audioEngine.playMusic(res.bgm_main, true);
   }
 });
 
