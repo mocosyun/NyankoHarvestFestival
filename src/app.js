@@ -5,6 +5,7 @@ var xSpeed = 0; //カートの移動速度
 var detectedX;　 //現在タッチしているX座標
 var savedX;　 //前回タッチしていたX座標
 var touching = false;　 //タッチ状況管理用flag
+var cloud;  //雲
 
 var audioEngine;
 var gameScene = cc.Scene.extend({
@@ -39,6 +40,9 @@ var game = cc.Layer.extend({
     itemsLayer = cc.Layer.create();
     this.addChild(itemsLayer);
 
+    //雲
+    this.schedule(this.addCloud, 4);
+
     //ショッピングカートを操作するレイヤー
     topLayer = cc.Layer.create();
     this.addChild(topLayer);
@@ -46,8 +50,10 @@ var game = cc.Layer.extend({
     topLayer.addChild(cart, 0);
     cart.setPosition(240, 60);
     this.schedule(this.addItem, 1);
+
     //タッチイベントのリスナー追加
     cc.eventManager.addListener(touchListener, this);
+
     //カートの移動のため　Update関数を1/60秒ごと実行させる　
     this.scheduleUpdate();
   },
@@ -58,6 +64,15 @@ var game = cc.Layer.extend({
   removeItem: function(item) {
     itemsLayer.removeChild(item);
   },
+
+//雲
+addCloud: function(/*event*/) {
+      var cloud = new Cloud();
+      this.addChild(cloud);
+  },
+  removeCloud: function(cloud) {
+      this.removeChild(cloud);
+},
   //カートの移動のため　Update関数を1/60秒ごと実行させる関数
   update: function(dt) {
     if (touching) {
@@ -82,7 +97,6 @@ var game = cc.Layer.extend({
       cart.setPosition(cart.getPosition().x + xSpeed, cart.getPosition().y);
     }
   }
-
 });
 
 var Item = cc.Sprite.extend({
@@ -125,6 +139,25 @@ var Item = cc.Sprite.extend({
       gameLayer.removeItem(this)
     }
   }
+});
+
+//雲クラス
+var Cloud = cc.Sprite.extend({
+    ctor: function() {
+        this._super();
+        this.initWithFile(res.game_cloud);
+    },
+    onEnter: function() {
+        this._super();
+        this.setPosition(600, 280);
+        var moveAction = cc.MoveTo.create(10.5, new cc.Point( -100, 275));
+        this.runAction(moveAction);
+        this.scheduleUpdate();
+    },
+  /*  //画面の外にでた雲を消去する処理
+            if (this.getPosition().x < -50) {
+                gameLayer.removeCloud(this)
+            }*/
 });
 
 //バーチャルアナログパッド用のタッチリスナーの実装

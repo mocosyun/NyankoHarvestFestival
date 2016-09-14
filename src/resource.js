@@ -10,12 +10,13 @@ var res = {
   basket3_png: "res/basket3.png",
   basket4_png: "res/basket4.png",*/
   strawberry_png: "res/apple.png",
-//  leftbutton_png: "res/leftbutton.png",
-//  rightbutton_png: "res/rightbutton.png",
+  game_cloud: "res/game_cloud.png",
+  //leftbutton_png: "res/leftbutton.png",
+  //rightbutton_png: "res/rightbutton.png",
   background_png: "res/game_bg.png",
-   bgm_main : "res/ohisamatoosanpo.mp3",
-//  touchorigin_png: "res/touchorigin.png",
-//  touchend_png: "res/touchend.png"
+  bgm_main : "res/ohisamatoosanpo.mp3",
+  //touchorigin_png: "res/touchorigin.png",
+  //touchend_png: "res/touchend.png"
 };
 
 var g_resources = [];
