@@ -7,6 +7,9 @@ var direction = 1; // 猫の向き判定用flag
 var score_1 = 0;  // スコアの一桁目の値
 var score_2 = 0;  // スコアの二桁目の値
 var score_3 = 0;  // スコアの三桁目の値
+var score_label1;
+var score_label2;
+var score_label3;
 
 var detectedX;　 //現在タッチしているX座標
 var savedX;　 //前回タッチしていたX座標
@@ -69,6 +72,20 @@ var game = cc.Layer.extend({
   　var scorelayer = cc.Layer.create();
     scorelayer.addChild(score_counter, 0);
     this.addChild(scorelayer);
+        score_label1 = new cc.LabelTTF( "" + score_1, "Arial", 25);
+    score_label1.setPosition(cc.p(size.width * 0.962, size.height * 0.055));
+    score_label1.fillStyle = "black";
+    this.addChild(score_label1);
+
+    score_label2 = new cc.LabelTTF( "" + score_2, "Arial", 25);
+    score_label2.setPosition(cc.p(size.width * 0.9, size.height * 0.055));
+    score_label2.fillStyle = "black";
+    this.addChild(score_label2);
+
+    score_label3 = new cc.LabelTTF( "" + score_3, "Arial", 25);
+    score_label3.setPosition(cc.p(size.width * 0.838, size.height * 0.055));
+    score_label3.fillStyle = "black";
+    this.addChild(score_label3);
 
     // スコア数字表示
 
@@ -145,23 +162,74 @@ var Item = cc.Sprite.extend({
     // 果物の処理　1
     if (direction == 1 && (this.getPosition().y < 65 && this.getPosition().y > 60 && Math.abs(this.getPosition().x - (cat.getPosition().x + 30)) < 30  && !this.isBomb)) {
       gameLayer.removeItem(this);
+      score_1++;
+      if (score_1 > 9) {
+        score_2++;
+        if (score_2 > 9) {
+          score_3++;
+          score_2 = 0;
+          score_label3.setString("" + score_3);
+        }
+        score_1 = 0;
+        score_label2.setString("" + score_2)
+      }
+
+      score_label1.setString("" + score_1);
       console.log("FRUIT");
     }
     // 果物の処理　2
     if (direction == 0 && (this.getPosition().y < 65 && this.getPosition().y > 60 && Math.abs(this.getPosition().x - (cat.getPosition().x - 30)) < 30  && !this.isBomb)) {
       gameLayer.removeItem(this);
+      score_1++;
+      if (score_1 > 9) {
+        score_2++;
+        if (score_2 > 9) {
+          score_3++;
+          score_2 = 0;
+          score_label3.setString("" + score_3);
+        }
+        score_1 = 0;
+        score_label2.setString("" + score_2)
+      }
+
+      score_label1.setString("" + score_1);
       console.log("FRUIT");
     }
     // 爆弾の処理 1
     if (direction == 1 &&(this.getPosition().y < 60 && Math.abs(this.getPosition().x - (cat.getPosition().x + 30)) < 25 && this.isBomb)) {
       gameLayer.removeItem(this);
+      score_2--;
+      if (score_2 < 0) {
+        if (score_3 >= 1) {
+          score_3--;
+          score_2 = 9;
+          score_label3.setString("" + score_3);
+        }else{
+          score_2 = 0;
+          score_1 = 0;
+          score_label1.setString("" + score_1);
+        }
+      }
+      score_label2.setString("" + score_2);
       console.log("BUG");
       // cat.runAction(rep);
     }
     // 爆弾の処理 2
     if (direction == 0 &&(this.getPosition().y < 60 && Math.abs(this.getPosition().x - (cat.getPosition().x - 30)) < 25 && this.isBomb)) {
       gameLayer.removeItem(this);
-      console.log("BUG");
+      score_2--;
+      if (score_2 < 0) {
+        if (score_3 >= 1) {
+          score_3--;
+          score_2 = 9;
+          score_label3.setString("" + score_3);
+        }else{
+          score_2 = 0;
+          score_1 = 0;
+          score_label1.setString("" + score_1);
+        }
+      }
+      score_label2.setString("" + score_2);
       // cat.runAction(rep);
     }
     //地面に落ちたアイテムは消去
