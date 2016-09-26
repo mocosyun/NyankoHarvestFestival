@@ -11,6 +11,9 @@ var score_label1;
 var score_label2;
 var score_label3;
 
+var time = 60;
+var time_label;
+
 var detectedX;　 //現在タッチしているX座標
 var savedX;　 //前回タッチしていたX座標
 var touching = false;　 //タッチ状況管理用flag
@@ -72,23 +75,32 @@ var game = cc.Layer.extend({
   　var scorelayer = cc.Layer.create();
     scorelayer.addChild(score_counter, 0);
     this.addChild(scorelayer);
-        score_label1 = new cc.LabelTTF( "" + score_1, "Arial", 25);
+        score_label1 = new cc.LabelTTF( "0", "Arial", 25);
     score_label1.setPosition(cc.p(size.width * 0.962, size.height * 0.055));
     score_label1.fillStyle = "black";
     this.addChild(score_label1);
 
-    score_label2 = new cc.LabelTTF( "" + score_2, "Arial", 25);
+    score_label2 = new cc.LabelTTF( "0", "Arial", 25);
     score_label2.setPosition(cc.p(size.width * 0.9, size.height * 0.055));
     score_label2.fillStyle = "black";
     this.addChild(score_label2);
 
-    score_label3 = new cc.LabelTTF( "" + score_3, "Arial", 25);
+    score_label3 = new cc.LabelTTF( "0", "Arial", 25);
     score_label3.setPosition(cc.p(size.width * 0.838, size.height * 0.055));
     score_label3.fillStyle = "black";
     this.addChild(score_label3);
 
-    // スコア数字表示
+    // タイマー表示用
+    var timer_img = new cc.Sprite(res.timerleft_png);
+    timer_img.setPosition(cc.p(size.width * 0.1, size.height * 0.9));
+    var timerlayer = cc.Layer.create();
+    timerlayer.addChild(timer_img, 0);
+    this.addChild(timerlayer);
 
+    time_label = new cc.LabelTTF(time, "Arial", 25);
+    time_label.setPosition(cc.p(size.width * 0.11, size.height * 0.89));
+    time_label.fillStyle = "black";
+    this.addChild(time_label);
   },
   addItem: function() {
     var item = new Item();
@@ -99,16 +111,25 @@ var game = cc.Layer.extend({
   },
 
   //雲
-    addCloud: function(/*event*/) {
-        var cloud = new Cloud();
-        this.addChild(cloud);
-    },
-    removeCloud: function(cloud) {
-        this.removeChild(cloud);
-    },
+  addCloud: function(/*event*/) {
+    var cloud = new Cloud();
+    this.addChild(cloud);
+  },
+  removeCloud: function(cloud) {
+  this.removeChild(cloud);
+  },
+
+  timer_count: function(){
+    time--;
+    if (time < 0) {
+      time = 0;
+    }
+    time_label.setString(time);
+  },
 
   //カートの移動のため　Update関数を1/60秒ごと実行させる関数
   update: function(dt) {
+    this.schedule(this.timer_count, 1);
     if (touching) {
     //touchEnd(ドラックしている位置）とタッチ開始位置の差を計算する
     //そのままだと値が大きすぎるので50で割る
@@ -168,13 +189,13 @@ var Item = cc.Sprite.extend({
         if (score_2 > 9) {
           score_3++;
           score_2 = 0;
-          score_label3.setString("" + score_3);
+          score_label3.setString(score_3);
         }
         score_1 = 0;
-        score_label2.setString("" + score_2)
+        score_label2.setString(score_2)
       }
 
-      score_label1.setString("" + score_1);
+      score_label1.setString(score_1);
       console.log("FRUIT");
     }
     // 果物の処理　2
@@ -186,13 +207,13 @@ var Item = cc.Sprite.extend({
         if (score_2 > 9) {
           score_3++;
           score_2 = 0;
-          score_label3.setString("" + score_3);
+          score_label3.setString(score_3);
         }
         score_1 = 0;
-        score_label2.setString("" + score_2)
+        score_label2.setString(score_2)
       }
 
-      score_label1.setString("" + score_1);
+      score_label1.setString(score_1);
       console.log("FRUIT");
     }
     // 爆弾の処理 1
@@ -203,14 +224,14 @@ var Item = cc.Sprite.extend({
         if (score_3 >= 1) {
           score_3--;
           score_2 = 9;
-          score_label3.setString("" + score_3);
+          score_label3.setString(score_3);
         }else{
           score_2 = 0;
           score_1 = 0;
-          score_label1.setString("" + score_1);
+          score_label1.setString(score_1);
         }
       }
-      score_label2.setString("" + score_2);
+      score_label2.setString(score_2);
       console.log("BUG");
       // cat.runAction(rep);
     }
@@ -222,14 +243,14 @@ var Item = cc.Sprite.extend({
         if (score_3 >= 1) {
           score_3--;
           score_2 = 9;
-          score_label3.setString("" + score_3);
+          score_label3.setString(score_3);
         }else{
           score_2 = 0;
           score_1 = 0;
-          score_label1.setString("" + score_1);
+          score_label1.setString(score_1);
         }
       }
-      score_label2.setString("" + score_2);
+      score_label2.setString(score_2);
       // cat.runAction(rep);
     }
     //地面に落ちたアイテムは消去
